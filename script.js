@@ -13,13 +13,14 @@ const timerEl = document.getElementById("timer");
 const guessInput = document.getElementById("guess-input");
 const listContainer = document.getElementById("list-content");
 const wordListBox = document.getElementById("word-list");
+const wordSearchInput = document.getElementById("word-search");
 
 fetch("data.json")
   .then(res => res.json())
   .then(data => {
     words = data;
     unusedWords = [...words];
-    populateWordList();
+    populateWordList(words);
     pickNewWord();
     guessInput.focus();
   });
@@ -48,8 +49,7 @@ function pickNewWord() {
   const index = Math.floor(Math.random() * unusedWords.length);
   currentWord = unusedWords.splice(index, 1)[0];
 
-  const scrambled = scramble(currentWord.word);
-  createScrambledWord(scrambled);
+  createScrambledWord(scramble(currentWord.word));
   createLetterBoxes(currentWord.word);
 
   guessInput.value = "";
@@ -134,6 +134,7 @@ guessInput.addEventListener("keydown", e => {
       score++;
       scoreEl.textContent = score;
 
+      // POENG-ANIMASJON
       const scoreContainer = scoreEl.parentElement;
       scoreContainer.classList.remove("score-pop");
       void scoreContainer.offsetWidth;
@@ -156,10 +157,13 @@ guessInput.addEventListener("keydown", e => {
   }
 });
 
-function populateWordList() {
+/* 🔍 ORDLISTE + SØK */
+function populateWordList(wordArray) {
   listContainer.innerHTML = "";
-  const sortedWords = [...words].sort((a, b) => a.word.toLowerCase().localeCompare(b.word.toLowerCase()));
-  sortedWords.forEach(w => {
+
+  const sorted = [...wordArray].sort((a, b) => a.word.toLowerCase().localeCompare(b.word.toLowerCase()));
+
+  sorted.forEach(w => {
     const li = document.createElement("li");
 
     const wordDiv = document.createElement("div");
@@ -172,12 +176,17 @@ function populateWordList() {
 
     li.appendChild(wordDiv);
     li.appendChild(descDiv);
-
     listContainer.appendChild(li);
   });
 }
 
+wordSearchInput.addEventListener("input", () => {
+  const query = wordSearchInput.value.trim().toLowerCase();
+  const filtered = words.filter(w => w.word.toLowerCase().includes(query));
+  populateWordList(filtered);
+});
 
+/* KNAPPER */
 document.getElementById("new-word-btn").addEventListener("click", () => {
   pickNewWord();
   guessInput.focus();
@@ -185,7 +194,7 @@ document.getElementById("new-word-btn").addEventListener("click", () => {
 
 document.getElementById("toggle-list-btn").addEventListener("click", () => {
   wordListBox.classList.toggle("hidden");
+  wordSearchInput.value = "";
+  populateWordList(words);
   guessInput.focus();
 });
-
-
