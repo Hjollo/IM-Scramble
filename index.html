@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <title>IM Scramble</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>IM Scramble</h1>
+
+    <div class="status-bar">
+      <div>⏱ Tid: <span id="timer">0</span>s</div>
+      <div>⭐ Poeng: <span id="score">0</span></div>
+    </div>
+
+    <div class="game-box">
+      <div id="scrambled-word" class="scrambled-word">---</div>
+
+      <div class="hint-label">→ Dra bokstavene her for hint</div>
+      <div id="letter-boxes" class="letter-boxes"></div>
+
+      <input type="text" id="guess-input" placeholder="Skriv inn ordet og trykk Enter" autocomplete="off"/>
+
+      <div class="buttons">
+        <button id="new-word-btn">Nytt ord</button>
+        <button id="toggle-list-btn">Vis ordliste</button>
+      </div>
+
+      <div id="message" class="message"></div>
+    </div>
+
+    <div id="word-list" class="word-list hidden">
+      <h2>Ordliste</h2>
+      <ul id="list-content"></ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
